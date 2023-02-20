@@ -10,6 +10,9 @@ from CTFd.utils.helpers import get_infos
 from CTFd.utils.scores import get_standings
 from CTFd.utils.user import is_admin
 
+from sqlalchemy import func
+from CTFd.models import TeamFieldEntries
+
 scoreboard = Blueprint("scoreboard", __name__)
 
 
@@ -26,4 +29,10 @@ def listing():
         infos.append("Scores are not currently visible to users")
 
     standings = get_standings()
-    return render_template("scoreboard.html", standings=standings, infos=infos)
+    onsite_teams = TeamFieldEntries.query.filter_by(
+            field_id = 1
+        ).filter(
+            func.lower(TeamFieldEntries.value) == func.lower(str(True))
+        ).all()
+    onsite_ids = [ i.team_id for i in onsite_teams ]
+    return render_template("scoreboard.html", onsite_ids=onsite_ids, standings=standings, infos=infos)

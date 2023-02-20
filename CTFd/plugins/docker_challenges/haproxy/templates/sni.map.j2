@@ -1,0 +1,5 @@
+#domainname     backendname
+{% for container in containers %}
+{% set name = container.host.split('.')[0] %}
+{{ name }}. be_{{ name }}
+{% endfor %}
