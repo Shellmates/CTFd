@@ -18,6 +18,7 @@ UserAttrs = namedtuple(
         "verified",
         "team_id",
         "created",
+        "fields", # Added for the visibility of onsite challenges
     ],
 )
 
