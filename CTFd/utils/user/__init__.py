@@ -9,7 +9,7 @@ from CTFd.cache import cache
 from CTFd.constants.teams import TeamAttrs
 from CTFd.constants.users import UserAttrs
 from CTFd.models import Fails, Teams, Tracking, Users, db
-from CTFd.utils import get_config
+from CTFd.utils import get_config, config
 from CTFd.utils.security.auth import logout_user
 from CTFd.utils.security.signing import hmac
 
@@ -122,6 +122,20 @@ def get_current_user_type(fallback=None):
 def authed():
     return bool(session.get("id", False))
 
+# Used for the visibility of onsite challenges
+def is_onsite():
+    if authed():
+        if config.is_teams_mode():
+            team = get_current_team_attrs()
+            if team:
+                for tfield in team.fields:
+                    if tfield.name == "onsite":return tfield.value
+        else:
+            user = get_current_user_attrs()
+            if user:
+                for ufield in user.fields:
+                    if ufield.name == "onsite":return ufield.value
+    return False
 
 def is_admin():
     if authed():

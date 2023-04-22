@@ -170,6 +170,12 @@ class ChallengeList(Resource):
             c.id for c in Challenges.query.with_entities(Challenges.id).all()
         }
         for challenge in chal_q:
+            # Checks the visibility for onsite challenges
+            if challenge.tags:
+                if any("onsite" in tag["value"] for tag in challenge.tags) \
+                and not current_user.is_onsite():continue
+
+
             if challenge.requirements:
                 requirements = challenge.requirements.get("prerequisites", [])
                 anonymize = challenge.requirements.get("anonymize")

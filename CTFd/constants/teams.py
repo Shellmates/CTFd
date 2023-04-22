@@ -16,6 +16,7 @@ TeamAttrs = namedtuple(
         "banned",
         "captain_id",
         "created",
+        "fields", # Added for the visibility of onsite challenges
     ],
 )
 
