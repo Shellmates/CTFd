@@ -37,6 +37,8 @@ def SettingsForm(*args, **kwargs):
             if user.filled_all_required_fields is False:
                 # Show all fields
                 field_kwargs = {}
+            
+            field_kwargs["set_only_by_admin"] = False
             return field_kwargs
 
     field_kwargs = _SettingsForm.get_field_kwargs()

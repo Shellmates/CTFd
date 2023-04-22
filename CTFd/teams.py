@@ -246,6 +246,10 @@ def new():
             if field.required is True and (value is None or value == ""):
                 errors.append("Please provide all required fields")
                 break
+            
+            if field.set_only_by_admin and value:
+                errors.append("One of the fields cannot be set")
+                break
 
             # Handle special casing of existing profile fields
             if field.name.lower() == "affiliation":

@@ -977,6 +977,7 @@ class Fields(db.Model):
     required = db.Column(db.Boolean, default=False)
     public = db.Column(db.Boolean, default=False)
     editable = db.Column(db.Boolean, default=False)
+    set_only_by_admin = db.Column(db.Boolean, default=False)
 
     __mapper_args__ = {"polymorphic_identity": "standard", "polymorphic_on": type}
 

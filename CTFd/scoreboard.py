@@ -29,10 +29,11 @@ def listing():
         infos.append("Scores are not currently visible to users")
 
     standings = get_standings()
-    onsite_teams = TeamFieldEntries.query.filter_by(
-            field_id = 1
-        ).filter(
-            func.lower(TeamFieldEntries.value) == func.lower(str(True))
-        ).all()
-    onsite_ids = [ i.team_id for i in onsite_teams ]
-    return render_template("scoreboard.html", onsite_ids=onsite_ids, standings=standings, infos=infos)
+    # onsite_teams = TeamFieldEntries.query.filter_by(
+    #         field_id = 1
+    #     ).filter(
+    #         func.lower(TeamFieldEntries.value) == func.lower(str(True))
+    #     ).all()
+    # onsite_ids = [ i.team_id for i in onsite_teams ]
+    # return render_template("scoreboard.html", onsite_ids=onsite_ids, standings=standings, infos=infos)
+    return render_template("scoreboard.html", standings=standings, infos=infos)
