@@ -172,7 +172,7 @@ class ChallengeList(Resource):
         for challenge in chal_q:
             # Checks the visibility for onsite challenges
             if challenge.tags:
-                if any("onsite" in tag["value"] for tag in challenge.tags) \
+                if not is_admin() and any("onsite" in tag["value"] for tag in challenge.tags) \
                 and not current_user.is_onsite():continue
 
 

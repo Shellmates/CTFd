@@ -34,7 +34,10 @@ def build_custom_team_fields(
         if field.name.lower() in blacklisted_items:
             continue
 
-        form_field = getattr(form_cls, f"fields[{field.id}]")
+        try:
+            form_field = getattr(form_cls, f"fields[{field.id}]")
+        except Exception as e:
+            continue
 
         # Add the field_type to the field so we know how to render it
         form_field.field_type = field.field_type
@@ -49,6 +52,7 @@ def build_custom_team_fields(
                 form_field.render_kw = {"data-initial": initial}
 
         fields.append(form_field)
+    
     return fields
 
 
@@ -67,7 +71,7 @@ def attach_custom_team_fields(form_cls, **kwargs):
             input_field = BooleanField(
                 field.name, description=field.description, validators=validators
             )
-
+        
         setattr(form_cls, f"fields[{field.id}]", input_field)
 
 
@@ -89,7 +93,7 @@ def TeamRegisterForm(*args, **kwargs):
                 self, include_entries=False, blacklisted_items=()
             )
 
-    attach_custom_team_fields(_TeamRegisterForm)
+    attach_custom_team_fields(_TeamRegisterForm, set_only_by_admin=False)
     return _TeamRegisterForm(*args, **kwargs)
 
 
@@ -133,10 +137,12 @@ def TeamSettingsForm(*args, **kwargs):
 
         def get_field_kwargs():
             team = get_current_team()
-            field_kwargs = {"editable": True}
+            field_kwargs = { "editable": True }
             if team.filled_all_required_fields is False:
                 # Show all fields
                 field_kwargs = {}
+                
+            field_kwargs["set_only_by_admin"] = False
             return field_kwargs
 
         def __init__(self, *args, **kwargs):

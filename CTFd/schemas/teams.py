@@ -272,7 +272,7 @@ class TeamSchema(ma.ModelSchema):
                                 field_names=["fields"],
                             )
 
-                if field.editable is False and entry is not None:
+                if (field.set_only_by_admin or not field.editable) and entry is not None:
                     raise ValidationError(
                         f"Field '{field.name}' cannot be editted",
                         field_names=["fields"],

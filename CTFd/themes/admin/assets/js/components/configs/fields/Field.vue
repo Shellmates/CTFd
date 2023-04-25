@@ -80,6 +80,16 @@
             Shown on public profile
           </label>
         </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model.lazy="field.set_only_by_admin"
+            />
+            Can only be set by admin, users are allowed neither to set its value (doesn't appear on registration form) nor to change it
+          </label>
+        </div>
       </div>
     </div>
 

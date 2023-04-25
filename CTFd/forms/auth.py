@@ -27,7 +27,7 @@ def RegistrationForm(*args, **kwargs):
                 self, include_entries=False, blacklisted_items=()
             ) + build_registration_code_field(self)
 
-    attach_custom_user_fields(_RegistrationForm)
+    attach_custom_user_fields(_RegistrationForm, set_only_by_admin=False)
     attach_registration_code_field(_RegistrationForm)
 
     return _RegistrationForm(*args, **kwargs)
