@@ -548,7 +548,13 @@ class ChallengeAttempt(Resource):
         ).count()
 
         challenge = Challenges.query.filter_by(id=challenge_id).first_or_404()
-
+        
+        # Prevent online players from submitting flags on onsite challenges
+        if challenge:
+            if challenge.tags:
+                if any("onsite" in tag.value for tag in challenge.tags) \
+                and not current_user.is_onsite():abort(403)
+        
         if challenge.state == "hidden":
             abort(404)
 

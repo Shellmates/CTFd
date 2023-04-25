@@ -425,7 +425,6 @@ class Users(db.Model):
     def get_fields(self, admin=False):
         if admin:
             return self.field_entries
-
         return [
             entry for entry in self.field_entries if entry.field.public and entry.value
         ]
@@ -612,7 +611,6 @@ class Teams(db.Model):
     def get_fields(self, admin=False):
         if admin:
             return self.field_entries
-
         return [
             entry for entry in self.field_entries if entry.field.public and entry.value
         ]
