@@ -137,6 +137,19 @@ def is_onsite():
                     if ufield.name == "onsite":return ufield.value
     return False
 
+def is_team_onsite(team_id):
+    if tfields := get_team_attrs(team_id).fields:
+        return any(tfield.name == "onsite" and tfield.value for tfield in tfields)
+    return False
+
+# check if team limit size is applicable
+def team_limit_size_applicable(team_id):
+    team_size_applied_for = get_config("team_size_applied_for", default='all')
+    return team_size_applied_for == 'all' \
+        or (team_size_applied_for == 'onsite' and is_team_onsite(team_id)) \
+        or (team_size_applied_for == 'online' and not is_team_onsite(team_id))
+
+
 def is_admin():
     if authed():
         user = get_current_user_attrs()

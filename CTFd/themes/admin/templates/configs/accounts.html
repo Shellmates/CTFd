@@ -39,6 +39,14 @@
 		</div>
 
 		<div class="form-group">
+			{{ form.team_size_applied_for.label }}
+			{{ form.team_size_applied_for(class="form-control", value=team_size_applied_for) }}
+			<small class="form-text text-muted">
+				{{ form.team_size_applied_for.description }}
+			</small>
+		</div>
+
+		<div class="form-group">
 			{{ form.num_teams.label }}
 			{{ form.num_teams(class="form-control", value=num_teams) }}
 			<small class="form-text text-muted">

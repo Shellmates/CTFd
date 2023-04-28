@@ -23,6 +23,7 @@ from CTFd.utils.modes import TEAMS_MODE
 from CTFd.utils.security.auth import login_user, logout_user
 from CTFd.utils.security.signing import unserialize
 from CTFd.utils.validators import ValidationError
+from CTFd.utils.user import team_limit_size_applicable
 
 auth = Blueprint("auth", __name__)
 
@@ -538,7 +539,7 @@ def oauth_redirect():
                     clear_team_session(team_id=team.id)
 
                 team_size_limit = get_config("team_size", default=0)
-                if team_size_limit and len(team.members) >= team_size_limit:
+                if team_size_limit and team_limit_size_applicable(team.id) and len(team.members) >= team_size_limit:
                     plural = "" if team_size_limit == 1 else "s"
                     size_error = "Teams are limited to {limit} member{plural}.".format(
                         limit=team_size_limit, plural=plural

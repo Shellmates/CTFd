@@ -13,7 +13,7 @@ from CTFd.utils.decorators.visibility import (
 )
 from CTFd.utils.helpers import get_errors, get_infos
 from CTFd.utils.humanize.words import pluralize
-from CTFd.utils.user import get_current_user, get_current_user_attrs
+from CTFd.utils.user import get_current_user, get_current_user_attrs, team_limit_size_applicable
 
 teams = Blueprint("teams", __name__)
 
@@ -77,13 +77,14 @@ def invite():
     team_size_limit = get_config("team_size", default=0)
 
     if request.method == "GET":
+        team_limit_size_applied_for = get_config("team_size_applied_for", default='all')
         if team_size_limit:
+            plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural}".format(
-                    limit=team_size_limit, plural=pluralize(number=team_size_limit)
+                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
+                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
                 )
             )
-
         return render_template(
             "teams/invite.html", team=team, infos=infos, errors=errors
         )
@@ -97,7 +98,9 @@ def invite():
                 403,
             )
 
-        if team_size_limit and len(team.members) >= team_size_limit:
+        if team_size_limit \
+            and team_limit_size_applicable(team.id) \
+            and len(team.members) >= team_size_limit:
             errors.append(
                 "{name} has already reached the team size limit of {limit}".format(
                     name=team.name, limit=team_size_limit
@@ -134,11 +137,12 @@ def join():
 
     if request.method == "GET":
         team_size_limit = get_config("team_size", default=0)
+        team_limit_size_applied_for = get_config("team_size_applied_for", default='all')
         if team_size_limit:
             plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural}".format(
-                    limit=team_size_limit, plural=plural
+                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
+                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
                 )
             )
         return render_template("teams/join_team.html", infos=infos, errors=errors)
@@ -157,7 +161,9 @@ def join():
 
         if team and verify_password(passphrase, team.password):
             team_size_limit = get_config("team_size", default=0)
-            if team_size_limit and len(team.members) >= team_size_limit:
+            if team_size_limit \
+                and team_limit_size_applicable(team.id) \
+                and len(team.members) >= team_size_limit:
                 errors.append(
                     "{name} has already reached the team size limit of {limit}".format(
                         name=team.name, limit=team_size_limit
@@ -211,11 +217,12 @@ def new():
 
     if request.method == "GET":
         team_size_limit = get_config("team_size", default=0)
+        team_limit_size_applied_for = get_config("team_size_applied_for", default='all')
         if team_size_limit:
             plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural}".format(
-                    limit=team_size_limit, plural=plural
+                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
+                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
                 )
             )
         return render_template("teams/new_team.html", infos=infos, errors=errors)
