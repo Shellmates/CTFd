@@ -46,7 +46,8 @@ class AccountSettingsForm(BaseForm):
     team_size_applied_for = SelectField(
         "Team Size is applied on",
         description="Is the team size applied for all, onsite or online teams (Teams mode only)",
-        choices=[("all", "All teams"), ("onsite", "Onsite teams only"), ("online", "Online teams only")]
+        choices=[("all", "All teams"), ("onsite", "Onsite teams only"), ("online", "Online teams only")],
+        default="all",
     )
     num_teams = IntegerField(
         "Total Number of Teams",

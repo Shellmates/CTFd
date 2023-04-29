@@ -81,8 +81,8 @@ def invite():
         if team_size_limit:
             plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
-                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
+                "{applied_on} teams are limited to {limit} member{plural}".format(
+                    limit=team_size_limit, plural=plural, applied_on=team_limit_size_applied_for.capitalize()
                 )
             )
         return render_template(
@@ -141,8 +141,8 @@ def join():
         if team_size_limit:
             plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
-                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
+                "{applied_on} teams are limited to {limit} member{plural}".format(
+                    limit=team_size_limit, plural=plural, applied_on=team_limit_size_applied_for.capitalize()
                 )
             )
         return render_template("teams/join_team.html", infos=infos, errors=errors)
@@ -221,8 +221,8 @@ def new():
         if team_size_limit:
             plural = "" if team_size_limit == 1 else "s"
             infos.append(
-                "Teams are limited to {limit} member{plural} for {team_type} team{plural}".format(
-                    limit=team_size_limit, plural=plural, team_type=team_limit_size_applied_for
+                "{applied_on} teams are limited to {limit} member{plural}".format(
+                    limit=team_size_limit, plural=plural, applied_on=team_limit_size_applied_for.capitalize()
                 )
             )
         return render_template("teams/new_team.html", infos=infos, errors=errors)

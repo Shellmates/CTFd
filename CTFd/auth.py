@@ -539,10 +539,11 @@ def oauth_redirect():
                     clear_team_session(team_id=team.id)
 
                 team_size_limit = get_config("team_size", default=0)
+                team_limit_size_applied_for = get_app_config("team_limit_size_applied_for")
                 if team_size_limit and team_limit_size_applicable(team.id) and len(team.members) >= team_size_limit:
                     plural = "" if team_size_limit == 1 else "s"
-                    size_error = "Teams are limited to {limit} member{plural}.".format(
-                        limit=team_size_limit, plural=plural
+                    size_error = "{applied_on} teams are limited to {limit} member{plural}.".format(
+                        limit=team_size_limit, plural=plural, applied_on=team_limit_size_applied_for.capitalize()
                     )
                     error_for(endpoint="auth.login", message=size_error)
                     return redirect(url_for("auth.login"))
