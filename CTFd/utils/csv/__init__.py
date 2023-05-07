@@ -390,6 +390,45 @@ def load_challenges_csv(dict_reader):
     return True
 
 
+def dump_scoreboard_json_ctftime_format():
+
+    json_standings = []
+    standings = get_standings()
+
+    if is_teams_mode():
+        for i, standing in enumerate(standings):
+            team = Teams.query.filter_by(id=standing.account_id).first()
+            fields = {
+                "pos": i+1,
+                "team": team.name,
+                "score": int(standing.score),
+            }
+
+            json_standings.append(fields)
+
+    elif is_users_mode():
+        for i, standing in enumerate(standings):
+            user = Users.query.filter_by(id=standing.account_id).first()
+            fields = {
+                "pos": i+1,
+                "user": user.name,
+                "score": int(standing.score),
+            }
+
+            json_standings.append(fields)
+
+    # In Python 3 send_file requires bytes
+    output = BytesIO()
+    output.write(
+        json.dumps({
+            "standings": json_standings,
+        })
+        .encode("utf-8")
+    )
+    output.seek(0)
+
+    return output
+
 CSV_KEYS = {
     "scoreboard": dump_scoreboard_csv,
     "users+fields": dump_users_with_fields_csv,

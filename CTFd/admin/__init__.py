@@ -49,7 +49,7 @@ from CTFd.models import (
 )
 from CTFd.utils import config as ctf_config
 from CTFd.utils import get_config, set_config
-from CTFd.utils.csv import dump_csv, load_challenges_csv, load_teams_csv, load_users_csv
+from CTFd.utils.csv import dump_csv, load_challenges_csv, load_teams_csv, load_users_csv, dump_scoreboard_json_ctftime_format
 from CTFd.utils.decorators import admins_only
 from CTFd.utils.exports import background_import_ctf
 from CTFd.utils.exports import export_ctf as export_ctf_util
@@ -172,6 +172,20 @@ def export_csv():
         ),
     )
 
+# added this to export scoreboard in CTFtime format
+@admin.route("/admin/export/ctftime")
+@admins_only
+def export_ctftime():
+    output = dump_scoreboard_json_ctftime_format()
+
+    return send_file(
+        output,
+        as_attachment=True,
+        cache_timeout=-1,
+        attachment_filename="{name}-scorboard-ctftime.json".format(
+            name=ctf_config.ctf_name()
+        ),
+    )
 
 @admin.route("/admin/config", methods=["GET", "POST"])
 @admins_only

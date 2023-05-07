@@ -1,8 +1,7 @@
 <div role="tabpanel" class="tab-pane config-section" id="backup">
 	<ul class="nav nav-tabs mb-3" role="tablist">
 		<li class="nav-item">
-			<a class="nav-link active" href="#export-ctf" aria-controls="export-ctf" role="tab"
-			   data-toggle="tab">Export</a>
+			<a class="nav-link active" href="#export-ctf" aria-controls="export-ctf" role="tab" data-toggle="tab">Export</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" href="#import-ctf" aria-controls="import-ctf" role="tab" data-toggle="tab">Import</a>
@@ -12,6 +11,9 @@
 		</li>
 		<li class="nav-item">
 			<a class="nav-link " href="#import-csv" aria-controls="import-csv" role="tab" data-toggle="tab">Import CSV</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link " href="#export-ctftime" aria-controls="ecport-ctftime" role="tab" data-toggle="tab">Export Scoreboard for CTFtime</a>
 		</li>
 	</ul>
 	<div class="tab-content">
@@ -91,6 +93,15 @@
 				<input type="submit" class="btn btn-warning" value="Import CSV">
 			</form>
 			{% endwith %}
+		</div>
+		<div role="tabpanel" class="tab-pane" id="export-ctftime">
+			<div class="form-group">
+				<p>Exports the scoreboard in JSON format as needed by CTFtime.</p>
+				<p>To export click the button below.</p>
+			</div>
+			<div class="form-group">
+				<a href="{{ url_for('admin.export_ctftime') }}" id="export-button" class="btn btn-warning">Export Scoreboard</a>
+			</div>
 		</div>
 	</div>
 </div>
