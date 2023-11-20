@@ -43,6 +43,12 @@ from CTFd.utils.user import (
 )
 
 
+def init_cli(app):
+    from CTFd.cli import _cli
+
+    app.register_blueprint(_cli, cli_group=None)
+
+
 def init_template_filters(app):
     app.jinja_env.filters["markdown"] = markdown
     app.jinja_env.filters["unix_time"] = unix_time
@@ -52,7 +58,7 @@ def init_template_filters(app):
 
 
 def init_template_globals(app):
-    from CTFd.constants import JINJA_ENUMS
+    from CTFd.constants import JINJA_ENUMS  # noqa: I001
     from CTFd.constants.assets import Assets
     from CTFd.constants.config import Configs
     from CTFd.constants.plugins import Plugins
@@ -204,6 +210,7 @@ def init_request_processors(app):
                 "views.themes",
                 "views.files",
                 "views.healthcheck",
+                "views.robots",
             ):
                 return
             else:
@@ -275,7 +282,15 @@ def init_request_processors(app):
     @app.before_request
     def tokens():
         token = request.headers.get("Authorization")
-        if token and request.content_type == "application/json":
+        if token and (
+            request.mimetype == "application/json"
+            # Specially allow multipart/form-data for file uploads
+            or (
+                request.endpoint == "api.files_files_list"
+                and request.method == "POST"
+                and request.mimetype == "multipart/form-data"
+            )
+        ):
             try:
                 token_type, token = token.split(" ", 1)
                 user = lookup_user_token(token)
