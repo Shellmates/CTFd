@@ -28,6 +28,8 @@ def upgrade():
         sa.Column("required", sa.Boolean(), nullable=True),
         sa.Column("public", sa.Boolean(), nullable=True),
         sa.Column("editable", sa.Boolean(), nullable=True),
+        # add this column when creating the database because of the fields that we added in Hack.INI 23
+        sa.Column("set_only_by_admin", sa.Boolean(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
